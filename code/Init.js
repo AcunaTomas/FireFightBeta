@@ -14,12 +14,12 @@ var config = {
             debug: true
         }
     },
-    scene: [loader, Lvl]
+    scene: [menu, loader, Lvl]
     
 };
 
 //LEVEL SELECT - this number determines which level to load!
-var scene = 1
+var scene = 0
 
 
 //basic objects

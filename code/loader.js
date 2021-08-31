@@ -7,6 +7,11 @@ class loader extends Phaser.Scene
 
     preload()
     {
+        this.load.image('Treeset', 'maps/Trees.png')
+        this.load.image('Treeset', 'maps/Trees.png')
+        this.load.image('rock1', 'assets/Rock1.png')
+        this.load.image('rock2', 'assets/Rock2.png')
+        this.load.image('rock3', 'assets/Rock3.png')
         switch (scene)
         {
             case 0:
@@ -17,8 +22,6 @@ class loader extends Phaser.Scene
                 this.load.image('solidgrass', 'assets/solid.png');
                 this.load.image('marselo', 'assets/Marselo.png');
                 this.load.image('Tilemap1', 'maps/Tilemap1.png');
-                mapsizex = 1280;
-                mapsizey = 800;
                 
                 
                 console.log(1)
@@ -28,8 +31,6 @@ class loader extends Phaser.Scene
                 this.load.image('solidgrass', 'assets/solid.png');
                 this.load.image('marselo', 'assets/Marselo.png');   
                 this.load.image('Tilemap2', 'maps/Tilemap2.png');
-                mapsizex = 3800;
-                mapsizey = 1300;
                 
                 
                 console.log(2)
@@ -40,6 +41,10 @@ class loader extends Phaser.Scene
     
     create(delta)
     {
+        if (scene == 0)
+        {
+            this.scene.start('menu');
+        }
         this.sound.stopAll();
         var ta;
         ta = this.add.text(125, 300, '', { fontSize: '28px', fill: '#FFF' });

@@ -9,29 +9,48 @@ class Lvl extends Phaser.Scene
     {
         //Creation - Camera, Physics Groups, Solid Objects, Controls
 
-        coolcam= this.cameras.main;
-        this.cameras.main.setBounds(0,0,mapsizex,mapsizey);
-        //background = this.add.image(mapsizex/2,mapsizey/2, 'background' + scene.toString());
-
+        
         walls = this.physics.add.staticGroup()
 
         //Load Tilemaps
         mapx = this.make.tilemap({key: ('map' + scene.toString())})
         tilemapx = mapx.addTilesetImage('Tilemap' + scene.toString(), 'Tilemap' + scene.toString(), 128, 64)
+        var treemap = mapx.addTilesetImage('Trees', 'Treeset', 128,64)
+        
 
+
+        //Get the camera bounds based of the map's width and height
+        mapsizex = mapx.widthInPixels
+        mapsizey = (mapx.heightInPixels)/2
+        
+        coolcam= this.cameras.main;
+        this.cameras.main.setBounds(0,0,mapsizex,mapsizey);
+
+
+        
         //Parse Level Data and Objects
         level = mapx.createLayer('Ground', tilemapx);
         level.setCollisionByProperty({collides : true});
         var solid = mapx.createLayer('Solid', tilemapx);
-        solid.forEachTile(tile =>  {
-            console.log('solid')
 
+
+
+        var trees = mapx.createLayer('Trees', treemap);
+        trees.forEachTile(tile =>  {
+            if (tile.properties.collides == true)
+            {
+                var a = walls.create(tile.pixelX + 64, tile.pixelY + 32, 'Treeset');
+                a.body.setSize(32, 64);
+                trees.removeTileAt(tile.x, tile.y);
+            }
+            else if (tile.properties.Rock == true)
+            {
+                var a = walls.create(tile.pixelX + 64, tile.pixelY + 32, 'rock1');
+                a.body.setSize(32, 48);
+                trees.removeTileAt(tile.x, tile.y);
+            }
         })
         console.log(walls)
-
-
-        console.log(mapx)
-
 
 
         var sp = mapx.findObject("Points", obj => obj.name === "sp");
@@ -70,7 +89,7 @@ class Lvl extends Phaser.Scene
 
         //Colliders
         this.physics.add.collider(player, level);
-
+        this.physics.add.collider(player, walls);
 
 
     }
