@@ -12,6 +12,7 @@ class loader extends Phaser.Scene
         this.load.image('rock1', 'assets/Rock1.png')
         this.load.image('rock2', 'assets/Rock2.png')
         this.load.image('rock3', 'assets/Rock3.png')
+        this.load.image('smallfire', 'assets/Chars/smallfire.png')
         switch (scene)
         {
             case 0:
@@ -20,7 +21,7 @@ class loader extends Phaser.Scene
             case 1:
                 this.load.tilemapTiledJSON('map1', 'maps/Lvltext.json');
                 this.load.image('solidgrass', 'assets/solid.png');
-                this.load.image('marselo', 'assets/Marselo.png');
+                this.load.image('marselo', 'assets/Chars/char.png');
                 this.load.image('Tilemap1', 'maps/Tilemap1.png');
                 
                 
@@ -29,7 +30,7 @@ class loader extends Phaser.Scene
             case 2:
                 this.load.tilemapTiledJSON('map2', 'maps/Lvl2.json');
                 this.load.image('solidgrass', 'assets/solid.png');
-                this.load.image('marselo', 'assets/Marselo.png');   
+                this.load.image('marselo', 'assets/Chars/char.png');  
                 this.load.image('Tilemap2', 'maps/Tilemap2.png');
                 
                 
@@ -47,8 +48,8 @@ class loader extends Phaser.Scene
         }
         this.sound.stopAll();
         var ta;
-        ta = this.add.text(125, 300, '', { fontSize: '28px', fill: '#FFF' });
-        ta.setText('Objective: debug this shit');
+        ta = this.add.text(400, 300, '', { fontSize: '28px', fill: '#FFF' });
+        ta.setText('Objective: Debug the Fires');
         ta.setInteractive();
         ta.on('pointerdown', () => this.scene.start('Lvl'));
     }

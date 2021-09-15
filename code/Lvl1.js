@@ -11,6 +11,9 @@ class Lvl extends Phaser.Scene
 
         
         walls = this.physics.add.staticGroup()
+        plants = this.physics.add.staticGroup()
+        fire = this.physics.add.group()
+        spark = this.physics.add.group()
 
         //Load Tilemaps
         mapx = this.make.tilemap({key: ('map' + scene.toString())})
@@ -35,19 +38,14 @@ class Lvl extends Phaser.Scene
 
 
 
-        var trees = mapx.createLayer('Trees', treemap);
-        trees.forEachTile(tile =>  {
-            if (tile.properties.collides == true)
-            {
-                var a = walls.create(tile.pixelX + 64, tile.pixelY + 32, 'Treeset');
-                a.body.setSize(32, 64);
-                trees.removeTileAt(tile.x, tile.y);
-            }
-            else if (tile.properties.Rock == true)
+        var trees = mapx.createFromObjects('Trees',{name : 'Tree', key: 'Treeset'});
+        plants.addMultiple(trees)
+        solid.forEachTile(tile =>  {
+        if (tile.properties.Rock == true)
             {
                 var a = walls.create(tile.pixelX + 64, tile.pixelY + 32, 'rock1');
                 a.body.setSize(32, 48);
-                trees.removeTileAt(tile.x, tile.y);
+                solid.removeTileAt(tile.x, tile.y);
             }
         })
         console.log(walls)
@@ -86,12 +84,14 @@ class Lvl extends Phaser.Scene
         //Collision
 
         player = this.physics.add.sprite(sp.x,sp.y,'marselo');
-
+        player.setScale(0.8)
         //Colliders
         this.physics.add.collider(player, level);
         this.physics.add.collider(player, walls);
+        this.physics.add.collider(player, plants);
+        this.physics.add.overlap(spark, plants, this.sparku, null, this);
 
-
+        this.firestart(fire,plants)
     }
 
     update(delta)
@@ -129,8 +129,72 @@ class Lvl extends Phaser.Scene
                 player.setVelocityY(0)
             }
             
-            
+            this.fireupdate(fire)
 
 
     }
+
+
+    fireupdate(fire, delta)
+    {
+        fire.children.iterate(function (f)
+        {
+            var spread = 0;
+            //console.log(f.data.get('s'))
+            if (!f.data.get('s'))
+            {
+                f.data.set('s', 1)
+            }
+            else if (f.data.get('s') < 15000)
+            {
+                spread = f.data.get('s')
+                f.data.set('s', spread += 17)
+            }
+            else
+            {
+                var a = Math.floor(Math.random() * (32 - 64))  + -32;
+                var b = Math.floor(Math.random() * (32 - 64))  + -32;
+                spark.create(f.x + a, f.y + b, 'smallfire').setScale(0.5)
+                f.data.set('s', 0)
+            }
+        })
+    }
+    firestart(fire, plants)
+    {
+        plants.children.iterate( function (child)
+        {
+            child.body.setSize(32,96);
+            if (child.data.values.ignites == true)
+            {
+                console.log('fire')
+                fire.create(child.x, child.y-16, 'smallfire').setDataEnabled()
+                child.setData('ignites', false)
+            }
+        })
+    }
+    firespread(fire)
+    {
+        plants.children.iterate( function (child)
+        {
+            child.body.setSize(32,96);
+            if (child.data.values.ignites == true)
+            {
+                console.log('fire')
+                fire.create(child.x, child.y-16, 'smallfire')
+            }
+        })
+    }
+    sparku(spark, plant)
+    {
+        plant.data.set('ignites', true)
+        spark.destroy(true,true)
+        this.firestart(fire, plants)
+    }
+    
+
+
+
+    rand(min, max) {
+        return Math.floor(Math.random() * (max - min) ) + min;
+      }
 }

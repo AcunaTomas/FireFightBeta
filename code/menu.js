@@ -10,7 +10,7 @@ class menu extends Phaser.Scene
     }
     create()
     {
-        var men = this.add.image(400,300, 'menu1')
+        var men = this.add.image(640,360, 'menu1')
         men.setInteractive()
         scene = 2
         men.on('pointerdown', () => this.scene.start('loader'));

@@ -3,15 +3,15 @@ var config = {
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        width: 800,
-        height: 600,
+        width: 1280,
+        height: 720,
     },
 
     physics: {
         default: "arcade",
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            debug: false
         }
     },
     scene: [menu, loader, Lvl]
@@ -19,7 +19,7 @@ var config = {
 };
 
 //LEVEL SELECT - this number determines which level to load!
-var scene = 0
+var scene = 1
 
 
 //basic objects
@@ -29,7 +29,9 @@ var platforms;
 var background;
 var level;
 var walls;
-
+var fire;
+var spark;
+var plants;
 
 //Movement keys
 var cursors;
