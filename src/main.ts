@@ -1,6 +1,7 @@
 import Lvl from "./scenes/game_world";
 import HelloWorldScene from "./scenes/HelloWorldScene";
 import menu from "./scenes/menu";
+import HUD from "./scenes/HUD";
 var config = {
     type: Phaser.WEBGL,
     scale: {
@@ -14,10 +15,10 @@ var config = {
         default: "arcade",
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            debug: false
         }
     },
-    scene: [menu,HelloWorldScene, Lvl]
+    scene: [menu,HelloWorldScene, Lvl, HUD]
     
 };
 

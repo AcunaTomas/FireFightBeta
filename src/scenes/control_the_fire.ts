@@ -16,6 +16,7 @@ export default class FireController
 	private health = 100
     private timer = 0
     private spreadtime = 5000
+    private active = true
 
 	constructor(scene: Phaser.Scene, sprite: Phaser.Physics.Arcade.Sprite)
 	{
@@ -26,7 +27,7 @@ export default class FireController
 		//this.createAnimations()
 
 		this.stateMachine = new StateMachine(this, 'fire')
-        this.sprite.setInteractive().on('pointerdown', () => this.firepressed(this) ) //pass this fire as argument for distance check
+        //this.sprite.setInteractive().on('pointerdown', () => this.firepressed(this) ) //pass this fire as argument for distance check
 
 		this.stateMachine.addState('burn', {
 			onUpdate: this.burnOnUpdate,
@@ -36,10 +37,14 @@ export default class FireController
 			onEnter: this.deadOnEnter
 		})
         .addState('ignites', {
-            onEnter: this.igniteOnEnter,
-            onExit: this.igniteOnExit
+            onUpdate: this.igniteOnEnter,
+            //onExit: this.igniteOnExit
         })
-		.setState('burn')
+		.setState('ignites')
+
+        events.on('lose', this.gameover, this)
+
+
     }
 
 	update(dt: number)
@@ -50,31 +55,37 @@ export default class FireController
 
     private burnOnUpdate()
     {
-        if (this.timer < this.spreadtime)
+        if (this.active)
         {
-            this.timer = this.timer + 17
-            console.log(this.timer)
-        }
-        else
-        {
-            this.timer = 0
-            var fi = false
-            this.scene.foreste.forEach(tree => {
-                //console.log(tree.tree.x)
-                //console.log(Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, tree.tree.x, tree.tree.y))
-                //console.log(tree.stateMachine.currentState.name)
-                if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, tree.tree.x, tree.tree.y) < 100 && fi == false)
-                {
 
-                    if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, tree.tree.x, tree.tree.y) > 0 && tree.stateMachine.currentState.name == 'treeidle')
+
+            if (this.timer < this.spreadtime)
+            {
+                this.timer = this.timer + 17
+                //console.log(this.timer)
+            }
+            else
+            {
+                this.timer = 0
+                var fi = false
+                this.scene.foreste.forEach(tree => {
+                    //console.log(tree.tree.x)
+                    //console.log(Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, tree.tree.x, tree.tree.y))
+                    //console.log(tree.stateMachine.currentState.name)
+                    if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, tree.tree.x, tree.tree.y) < 100 && fi == false)
                     {
-                        tree.tree.data.values.ignites = true
-                        tree.stateMachine.setState('ignites')
-                        fi = true
+    
+                        if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, tree.tree.x, tree.tree.y) > 0 && tree.stateMachine.currentState.name == 'treeidle')
+                        {
+                            tree.tree.data.set('ignites', true)
+                            tree.stateMachine.setState('ignites')
+                            fi = true
+                        }
+    
                     }
+                });
+        }
 
-                }
-            });
         }
 
 
@@ -91,6 +102,9 @@ export default class FireController
 
     private igniteOnEnter()
     {
+        this.stateMachine.setState('burn')
+        this.scene.firesnd.play()
+        this.sprite.anims.play('idle')
 
     }
 
@@ -109,6 +123,12 @@ export default class FireController
             firecontroller.scene.player.firey = this.sprite.y
             events.emit('shoot')
         }
+    }
+
+    gameover()
+    {
+        this.active = false
+        //console.log('fireshutdown')
     }
 
 }

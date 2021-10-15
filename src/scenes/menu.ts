@@ -14,18 +14,23 @@ export default class HelloWorldScene extends Phaser.Scene
         this.load.image('play', "assets/Menu/jugar.png")
         this.load.image('levels', "assets/Menu/niveles.png")
         this.load.image('options', "assets/Menu/opciones.png")
+        this.load.audio('game', 'assets/SFX/gametest.wav')
     }
     create()
-    {   this.add.image(497,115, 'chain').flipX = true
+    {  
         this.add.image(640,360, 'base')
+        var men = this.add.image(670,250, 'play')
+        var dad = this.add.image(660,350, 'levels')
+        var ded = this.add.image(655,447, 'options')
         
-        var men = this.add.image(705,205, 'play')
-        this.add.image(510,115, 'chain')
-        
-        men.setInteractive() 
+        men.setInteractive()
+        dad.setInteractive()
+        ded.setInteractive() 
         a = 2
         
         men.on('pointerdown', () => this.scene.start('hello-world'));
+        dad.on('pointerdown', () => this.scene.start('hello-world'));
+        ded.on('pointerdown', () => this.scene.start('hello-world'));
     }
 }
 export var scene = 2

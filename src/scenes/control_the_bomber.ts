@@ -16,7 +16,8 @@ export default class bomber
 	private health = 100
 	private mx = 0
 	private my = 0
-	private shootime = 3000
+	private shootime = 1500
+	private mode = false
 	private firex = 0
 	private firey = 0
 
@@ -56,6 +57,7 @@ export default class bomber
 		.setState('idle')
 
 		events.on('shoot', this.shoot,this)
+		events.on('bstatechange', this.vschange,this)
 	}
 
 	update(dt: number)
@@ -63,11 +65,10 @@ export default class bomber
 		this.stateMachine.update(dt)
 	}
 
-	private setHealth(value: number)
+	private setHealth(value: number) //
 	{
 		this.health = Phaser.Math.Clamp(value, 0, 100)
 
-		events.emit('health-changed', this.health)
 		// TODO: check for death
 		if (this.health <= 0)
 		{
@@ -75,24 +76,37 @@ export default class bomber
 		}
 	}
 
-	private idleOnEnter()
+	private idleOnEnter() //maybe I'll use this someday
 	{
-		//this.sprite.play('player-idle')
+		this.sprite.play('pidle')
 	}
 
-	private idleOnUpdate()
+	private idleOnUpdate() //checks for input
 	{
+		if (Phaser.Input.Keyboard.JustDown(this.cursors.space))
+		{
+			events.emit('bstatechange')
+		}
 		if (this.pointer.isDown && this.scene.input.activePointer.getDuration() < 100)
 		{
-			this.stateMachine.setState('walk')
-			console.log('point')
+			if (this.mode == false)
+			{
+				this.stateMachine.setState('walk')
+				console.log('point')
+			}
+			else
+			{
+				events.emit('shoot')
+				console.log('shoot')
+			}
+
 		}
 
 	}
 
-	private walkOnEnter()
+	private walkOnEnter() //moves the player
 	{
-		//this.sprite.play('player-walk')
+		this.sprite.play('pwalk')
 		this.mx = this.pointer.worldX
 		this.my = this.pointer.worldY
 		this.scene.physics.moveTo(this.sprite, this.mx,this.my, 200)
@@ -108,7 +122,7 @@ export default class bomber
 
 	private walkOnUpdate()
 	{
-		console.log(this.sprite.body.facing)
+		//console.log(this.sprite.body.facing)
 		if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, this.mx, this.my) < 3)
 		{
 			this.stateMachine.setState('idle')
@@ -117,6 +131,7 @@ export default class bomber
 		{
 			this.stateMachine.setState('idle')
 		}
+
 	}
 
 	private walkOnExit()
@@ -125,23 +140,35 @@ export default class bomber
 		//this.sprite.setVelocity(0,0)
 	}
 
-	private deadOnEnter()
+	private deadOnEnter() //Legacy
 	{
 		//this.sprite.play('player-death')
 
-		this.scene.time.delayedCall(1500, () => {
-			this.scene.scene.start('game-over')
-		})
+		//this.scene.time.delayedCall(1500, () => {
+		//	this.scene.scene.start('game-over')
+		//})
 	}
 	private shoot()
 	{
-		this.stateMachine.setState('shoot')
+		if (this.mode && this.health > 0)
+		{
+			this.stateMachine.setState('shoot')
+			this.health += -5
+		}
+		else
+		{
+			this.stateMachine.setState('idle')
+		}
+
 	}
-	private shootin()
+	private shootin() //shoots in a direction based on the pointer's location, for about 1.5s
 	{
 		this.shootime += -17
+		events.emit('waterchange', this.health)
 		if (this.shootime > 0)
 		{
+
+
 			this.watershoot.setVisible(true)
 			if (this.sprite.x > this.pointer.worldX)
 			{	this.watershooty.x = -100
@@ -199,9 +226,11 @@ export default class bomber
 		}
 		else
 		{
+
 			this.stateMachine.setState('idle')
 			this.scene.water.clear(true,true)
-			this.shootime = 3000
+			this.shootime = 1500
+
 			this.watershoot.x = -100
 			this.watershoot.y = -100
 			this.watershoot.setVisible(false)
@@ -211,8 +240,20 @@ export default class bomber
 
 		}
 	}
-	private createAnimations()
+	private createAnimations() //idk if I'll use this, seems like a waste of processing time
 	{
 
+	}
+	private vschange() //switch firing modes
+	{
+		if (!this.mode)
+		{
+			this.mode = true
+
+		}
+		else
+		{
+			this.mode = false
+		}
 	}
 }

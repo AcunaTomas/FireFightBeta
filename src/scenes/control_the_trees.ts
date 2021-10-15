@@ -6,15 +6,15 @@ import { sharedInstance as events } from './EventCenter'
 export default class TreeController
 {
     private scene: Phaser.Scene
-    private tree: Phaser.GameObjects.GameObject
+    private tree: Phaser.Physics.Arcade.Sprite
     private stateMachine: StateMachine
 
-    constructor(scene: Phaser.Scene, sprite: Phaser.GameObjects.GameObject)
+    constructor(scene: Phaser.Scene, sprite: Phaser.Physics.Arcade.Sprite)
     {
         this.scene = scene
         this.tree = sprite
         this.stateMachine = new StateMachine(this, 'tree')
-        
+        this.tree.anims.play('tree' + (Math.floor(Math.random() * 3) + 1))
         this.stateMachine.addState('ignites', {
             onEnter: this.startFire,
 		})
@@ -36,8 +36,9 @@ export default class TreeController
     {
         if (this.tree.data.values.ignites == true)
         {
-            const f = this.scene.fire.create(this.tree.x, this.tree.y, 'smallfire')
+            const f = this.scene.fire.create(this.tree.x, this.tree.y, 'fireidle')
             f.setInteractive()
+            f.setScale(0.5)
             this.scene.fires.push(new FireController(this.scene, f))
             this.stateMachine.setState('burn')
         }
