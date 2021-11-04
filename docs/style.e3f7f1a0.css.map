@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA;IACI,iBAAiB;IACjB,iDAAyB;AAC7B","file":"style.e3f7f1a0.css","sourceRoot":"..\\src","sourcesContent":["@font-face {\r\n    font-family: Wood;\r\n    src: url('Woodstamp.otf');\r\n}"]}
