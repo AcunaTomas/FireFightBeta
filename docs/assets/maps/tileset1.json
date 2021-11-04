@@ -1,0 +1,14 @@
+{ "columns":1,
+ "image":"Tilemap1.png",
+ "imageheight":64,
+ "imagewidth":254,
+ "margin":0,
+ "name":"Tilemap1",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.7.0",
+ "tileheight":64,
+ "tilewidth":128,
+ "type":"tileset",
+ "version":"1.6"
+}
