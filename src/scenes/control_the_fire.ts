@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import StateMachine from '../statemachine/StateMachine'
-import bomber from './control_the_bomber'
+
 import { sharedInstance as events } from './EventCenter'
 
 
@@ -77,9 +77,13 @@ export default class FireController
     
                         if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, tree.tree.x, tree.tree.y) > 0 && tree.stateMachine.currentState.name == 'treeidle')
                         {
-                            tree.tree.data.set('ignites', true)
-                            tree.stateMachine.setState('ignites')
-                            fi = true
+                            if(Math.floor(Math.random() * 2) == 1)
+                            {
+                                tree.tree.data.set('ignites', true)
+                                tree.stateMachine.setState('ignites')
+                                fi = true
+                            }
+
                         }
     
                     }
@@ -113,6 +117,7 @@ export default class FireController
 
     }
 
+    //TODO: Delete
     private firepressed(firecontroller: this)
     {
         console.log(firecontroller.sprite)

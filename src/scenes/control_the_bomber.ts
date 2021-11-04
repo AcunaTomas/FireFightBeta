@@ -29,12 +29,13 @@ export default class bomber
 		this.pointer = pointer
 		this.watershoot = watershoot
 		this.watershooty = watershooty
-		this.watershoot.setScale(3.0).refreshBody()
+		this.watershoot.setScale(1.1).refreshBody()
 		this.watershoot.setVisible(false)
-		this.watershooty.setScale(3.0).refreshBody()
+		this.watershooty.setScale(1.1).refreshBody()
 		this.watershooty.setVisible(false)
 		this.createAnimations()
 		this.stateMachine = new StateMachine(this, 'player')
+
 
 		console.log(this.sprite.body.physicsType)
 
@@ -48,16 +49,19 @@ export default class bomber
 			onExit: this.walkOnExit
 		})
 		.addState('dead', {
-			onEnter: this.deadOnEnter
+			onEnter: this.del
 		})
 		.addState('shoot', {
 			onEnter: this.shoot,
 			onUpdate: this.shootin
 		})
 		.setState('idle')
-
+		this.sprite.anims.play('pidle')
 		events.on('shoot', this.shoot,this)
 		events.on('bstatechange', this.vschange,this)
+		events.on('healthchanged', this.changehealth, this)
+		//events.on('win', this.del, this)
+		//events.on('lose', this.del, this)
 	}
 
 	update(dt: number)
@@ -78,7 +82,11 @@ export default class bomber
 
 	private idleOnEnter() //maybe I'll use this someday
 	{
-		this.sprite.play('pidle')
+		//console.log(this.sprite)
+		if (this.health <= 0)
+		{
+			events.emit('end')
+		}
 	}
 
 	private idleOnUpdate() //checks for input
@@ -86,18 +94,19 @@ export default class bomber
 		if (Phaser.Input.Keyboard.JustDown(this.cursors.space))
 		{
 			events.emit('bstatechange')
+			console.log(this.sprite)
 		}
 		if (this.pointer.isDown && this.scene.input.activePointer.getDuration() < 100)
 		{
 			if (this.mode == false)
 			{
 				this.stateMachine.setState('walk')
-				console.log('point')
+				//console.log('point')
 			}
 			else
 			{
 				events.emit('shoot')
-				console.log('shoot')
+				//console.log('shoot')
 			}
 
 		}
@@ -123,12 +132,15 @@ export default class bomber
 	private walkOnUpdate()
 	{
 		//console.log(this.sprite.body.facing)
+		this.scene.psnd.play()
 		if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, this.mx, this.my) < 3)
 		{
+			this.sprite.play('pidle')
 			this.stateMachine.setState('idle')
 		}
 		if (!this.sprite.body.touching.none)
 		{
+			this.sprite.play('pidle')
 			this.stateMachine.setState('idle')
 		}
 
@@ -150,10 +162,18 @@ export default class bomber
 	}
 	private shoot()
 	{
-		if (this.mode && this.health > 0)
+		if (this.mode)
 		{
-			this.stateMachine.setState('shoot')
-			this.health += -5
+			if (this.health > 0)
+			{
+				this.stateMachine.setState('shoot')
+				this.health += -5
+			}
+			else
+			{
+				this.stateMachine.setState('idle')
+			}
+
 		}
 		else
 		{
@@ -171,11 +191,13 @@ export default class bomber
 
 			this.watershoot.setVisible(true)
 			if (this.sprite.x > this.pointer.worldX)
-			{	this.watershooty.x = -100
+			{	
+				this.sprite.anims.play('pidle')
+				this.watershooty.x = -100
 				this.watershooty.y = -100
 				this.watershooty.setVisible(false)
 				this.watershoot.x = this.sprite.x + -72
-				this.watershoot.y = this.sprite.y + 24
+				this.watershoot.y = this.sprite.y + 10
 				this.watershoot.flipX = true
 				if (this.sprite.flipX)
 				{
@@ -187,11 +209,13 @@ export default class bomber
 				}
 			}
 			else if (this.sprite.x < this.pointer.worldX)
-			{	this.watershooty.x = -100
+			{	
+				this.sprite.anims.play('pidle')
+				this.watershooty.x = -100
 				this.watershooty.y = -100
 				this.watershooty.setVisible(false)
 				this.watershoot.x = this.sprite.x + 72
-				this.watershoot.y = this.sprite.y + 24
+				this.watershoot.y = this.sprite.y + 10
 				this.watershoot.flipX = false
 				if (this.sprite.flipX)
 				{
@@ -204,6 +228,7 @@ export default class bomber
 			}
 			if( this.sprite.y - this.pointer.worldY > 44)
 			{
+				this.sprite.anims.play('psu')
 				this.watershoot.x = -100
 				this.watershoot.y = -100
 				this.watershoot.setVisible(false)
@@ -214,6 +239,7 @@ export default class bomber
 			}
 			else if (this.sprite.y - this.pointer.worldY < -44)
 			{
+				this.sprite.anims.play('psd')
 				this.watershoot.x = -100
 				this.watershoot.y = -100
 				this.watershoot.setVisible(false)
@@ -255,5 +281,15 @@ export default class bomber
 		{
 			this.mode = false
 		}
+	}
+	private del()
+	{
+		console.log('del')
+		this.sprite.destroy(true)
+	}
+	private changehealth(health)
+	{
+		this.health += health
+		events.emit('waterchange', this.health)
 	}
 }

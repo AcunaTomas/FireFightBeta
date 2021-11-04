@@ -1,7 +1,9 @@
+import menu from "./scenes/menu";
 import Lvl from "./scenes/game_world";
 import HelloWorldScene from "./scenes/HelloWorldScene";
-import menu from "./scenes/menu";
+
 import HUD from "./scenes/HUD";
+import gover from "./scenes/Gover";
 var config = {
     type: Phaser.WEBGL,
     scale: {
@@ -18,7 +20,7 @@ var config = {
             debug: false
         }
     },
-    scene: [menu,HelloWorldScene, Lvl, HUD]
+    scene: [menu,HelloWorldScene, Lvl, HUD, gover]
     
 };
 
