@@ -20,6 +20,7 @@ export default class bomber
 	private mode = false
 	private firex = 0
 	private firey = 0
+	private pollinput
 
 	constructor(scene: Phaser.Scene,sprite: Phaser.Physics.Arcade.Sprite, cursors: CursorKeys, pointer: Phaser.Input.Pointer, watershoot:Phaser.Physics.Arcade.Sprite, watershooty:Phaser.Physics.Arcade.Sprite )
 	{
@@ -27,11 +28,12 @@ export default class bomber
 		this.sprite = sprite
 		this.cursors = cursors
 		this.pointer = pointer
+		this.pollinput = true
 		this.watershoot = watershoot
 		this.watershooty = watershooty
-		this.watershoot.setScale(1.1).refreshBody()
+		this.watershoot.setScale(1.1,1.4).refreshBody()
 		this.watershoot.setVisible(false)
-		this.watershooty.setScale(1.1).refreshBody()
+		this.watershooty.setScale(1.4,1.1).refreshBody()
 		this.watershooty.setVisible(false)
 		this.createAnimations()
 		this.stateMachine = new StateMachine(this, 'player')
@@ -60,6 +62,8 @@ export default class bomber
 		events.on('shoot', this.shoot,this)
 		events.on('bstatechange', this.vschange,this)
 		events.on('healthchanged', this.changehealth, this)
+		events.on('pause', ()=> this.pollinput = false, this)
+		events.on('unpause', ()=> this.scene.time.delayedCall(600, ()=> this.pollinput = true), this)
 		//events.on('win', this.del, this)
 		//events.on('lose', this.del, this)
 	}
@@ -91,12 +95,12 @@ export default class bomber
 
 	private idleOnUpdate() //checks for input
 	{
-		if (Phaser.Input.Keyboard.JustDown(this.cursors.space))
+		if (Phaser.Input.Keyboard.JustDown(this.cursors.space) && this.pollinput)
 		{
 			events.emit('bstatechange')
 			console.log(this.sprite)
 		}
-		if (this.pointer.isDown && this.scene.input.activePointer.getDuration() < 100)
+		if (this.pointer.isDown && this.pollinput && this.scene.input.activePointer.getDuration() < 100)
 		{
 			if (this.mode == false)
 			{
@@ -196,7 +200,7 @@ export default class bomber
 				this.watershooty.x = -100
 				this.watershooty.y = -100
 				this.watershooty.setVisible(false)
-				this.watershoot.x = this.sprite.x + -72
+				this.watershoot.x = this.sprite.x + -102
 				this.watershoot.y = this.sprite.y + 10
 				this.watershoot.flipX = true
 				if (this.sprite.flipX)
@@ -214,7 +218,7 @@ export default class bomber
 				this.watershooty.x = -100
 				this.watershooty.y = -100
 				this.watershooty.setVisible(false)
-				this.watershoot.x = this.sprite.x + 72
+				this.watershoot.x = this.sprite.x + 102
 				this.watershoot.y = this.sprite.y + 10
 				this.watershoot.flipX = false
 				if (this.sprite.flipX)
@@ -234,7 +238,7 @@ export default class bomber
 				this.watershoot.setVisible(false)
 				this.watershooty.setVisible(true)
 				this.watershooty.x = this.sprite.x 
-				this.watershooty.y = this.sprite.y - 74
+				this.watershooty.y = this.sprite.y - 104
 				this.watershooty.flipY = false
 			}
 			else if (this.sprite.y - this.pointer.worldY < -44)
@@ -245,7 +249,7 @@ export default class bomber
 				this.watershoot.setVisible(false)
 				this.watershooty.setVisible(true)
 				this.watershooty.x = this.sprite.x 
-				this.watershooty.y = this.sprite.y + 74
+				this.watershooty.y = this.sprite.y + 104
 				this.watershooty.flipY = true
 			}
 			

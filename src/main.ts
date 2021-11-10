@@ -1,9 +1,14 @@
+import 'regenerator-runtime/runtime'
+
 import menu from "./scenes/menu";
 import Lvl from "./scenes/game_world";
 import HelloWorldScene from "./scenes/HelloWorldScene";
+import ugly from "./scenes/whydoineedtodothisuglyness"
+localStorage.clear();
 
 import HUD from "./scenes/HUD";
 import gover from "./scenes/Gover";
+import actualpreloader from './scenes/actualpreloader';
 var config = {
     type: Phaser.WEBGL,
     scale: {
@@ -13,6 +18,7 @@ var config = {
         height: 720,
     },
 
+
     physics: {
         default: "arcade",
         arcade: {
@@ -20,7 +26,8 @@ var config = {
             debug: false
         }
     },
-    scene: [menu,HelloWorldScene, Lvl, HUD, gover]
+    scene: [ugly,actualpreloader,menu,HelloWorldScene, Lvl, HUD, gover]
+
     
 };
 

@@ -2,8 +2,12 @@
 
 
 import Phaser from 'phaser'
+import { DE_DE, EN_US, ES_AR, PT_BR } from '../enums/languages'
+import { FETCHED, FETCHING, READY, TODO } from '../enums/status'
+import { getTranslations, getPhrase } from '../services/translations'
 export default class HelloWorldScene extends Phaser.Scene
 {
+    //Interface code -
     private lvlback
     private men
     private dad 
@@ -18,25 +22,22 @@ export default class HelloWorldScene extends Phaser.Scene
     private txt5
     private txtback
 
+    //Translation strings - Shameless Copypasta
+    private spanish
+    private english
+
+    private updatedTextInScene
+    private updatedString = 'Siguiente'
+    private wasChangedLanguage = TODO
+
+
 	constructor()
 	{
 		super('menu')
 	}
     preload()
     {
-        this.load.image('menu1', "assets/Menu/Options1.png")
-        this.load.image('tback', 'assets/Menu/LogoVacio.png')
-        this.load.image('tlogo', 'assets/Menu/LogoTitulo.png')
-        this.load.image('base', "assets/Menu/base con agarradera.png")
-        this.load.image('chain', "assets/Menu/CADENA1.png")
-        this.load.image('play', "assets/Menu/jugar.png")
-        this.load.image('levels', "assets/Menu/niveles.png")
-        this.load.image('options', "assets/Menu/opciones.png")
-        this.load.image('prope', 'assets/Menu/prope.png')
-        this.load.audio('game', 'assets/SFX/gametest.wav')
-        this.load.audio('pstep', 'assets/SFX/step.wav')
-        this.load.audio('mus', 'assets/SFX/menu.wav')
-        this.load.image('lvlscr','assets/Menu/LvlSelect.png')
+
     }
     create()
     {  
@@ -48,9 +49,9 @@ export default class HelloWorldScene extends Phaser.Scene
         this.men = this.add.image(670,345, 'play')
         this.dad = this.add.image(660,445, 'levels')
         this.ded = this.add.image(655,543, 'options')
-        this.mtxt =  this.add.text(600, 325, 'Jugar', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' })
-        this.datxt =  this.add.text(600, 425, 'Niveles', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' })
-        this.detxt =  this.add.text(600, 527, 'Opciones', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' })
+        this.mtxt =  this.add.text(600, 325, getPhrase('Play'), { fontFamily:'Wood', fontSize: '72px', fill: '#663300' })
+        this.datxt =  this.add.text(600, 425, getPhrase('Levels'), { fontFamily:'Wood', fontSize: '72px', fill: '#663300' })
+        this.detxt =  this.add.text(600, 527, getPhrase('Options'), { fontFamily:'Wood', fontSize: '72px', fill: '#663300' })
         this.lvlback = this.add.image(650,250, 'lvlscr')
         this.txt1 = this.add.text(480, 160, '1', { fontFamily:'Wood', fontSize: '72px', fill: '#FFF' })
         this.txt2 = this.add.text(640, 200, '2', { fontFamily:'Wood', fontSize: '72px', fill: '#FFF' })
@@ -82,13 +83,21 @@ export default class HelloWorldScene extends Phaser.Scene
 
     }
 
+    update()
+    {
+        if(this.wasChangedLanguage === FETCHED){
+            this.wasChangedLanguage = READY;
+            //this.updatedTextInScene.setText(getPhrase(this.updatedString));
+        }
+    }
     play()
     {
         this.scene.start('hello-world',{s:1})
     }
     options()
     {
-        this.scene.start('gover')
+        //this.scene.start('gover')
+        this.getTranslations(EN_US)
     }
     levels()
     {
@@ -117,5 +126,13 @@ export default class HelloWorldScene extends Phaser.Scene
         this.txt5.setVisible(false)
         this.txtback.setVisible(false)
     }
+    async getTranslations(language){
+        this.wasChangedLanguage = FETCHING
+        await getTranslations(language)
+        this.wasChangedLanguage = FETCHED
+        // si solo se tiene un menu para elegir las opciones de idiomas conviene cargar aca la misma
+        // this.scene.start('play')
+    }
 }
-export var scene = 3
+
+

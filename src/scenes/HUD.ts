@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { sharedInstance as events } from './EventCenter'
+import { getPhrase } from '../services/translations'
 
 export default class HUD extends Phaser.Scene
 {
@@ -41,7 +42,7 @@ export default class HUD extends Phaser.Scene
 		this.add.image(75,97,'options').setScale(0.4)
         this.pausemenu = this.physics.add.image(653,100, 'prope').setVisible(false)
 		this.decor = this.physics.add.image(660,100, 'play').setVisible(false)
-		this.decortxt = this.add.text(600,85, 'Pausa', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' }).setVisible(false)
+		this.decortxt = this.add.text(600,85, getPhrase('Pause'), { fontFamily:'Wood', fontSize: '72px', fill: '#663300' }).setVisible(false)
 		this.pausebut = this.physics.add.image(1230,30, 'pausebutton')
 		this.menbut = this.physics.add.image(660,247, 'play').setVisible(false)
 		this.resbut = this.physics.add.image(640,347, 'options').setVisible(false)
@@ -52,7 +53,7 @@ export default class HUD extends Phaser.Scene
 		this.timetxt = this.add.text(40,50, 'Time:', { fontFamily:'Wood', fontSize: '28px', fill: '#663300' })
 		this.firetxt = this.add.text(80,90, '', { fontFamily:'Wood', fontSize: '28px', fill: '#663300' })
 		this.txt1 = this.add.text(600,227, 'Menu', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' }).setVisible(false)
-		this.txt2 = this.add.text(560,327, 'Continuar', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' }).setVisible(false)
+		this.txt2 = this.add.text(560,327, getPhrase('Continue'), { fontFamily:'Wood', fontSize: '72px', fill: '#663300' }).setVisible(false)
 		this.wsbut.anims.play('shootb')
 		this.pausemenu.setInteractive()
 		this.pausebut.setInteractive()
@@ -160,11 +161,12 @@ export default class HUD extends Phaser.Scene
 		this.resbut.setVisible(true)
 		this.txt1.setVisible(true)
 		this.txt2.setVisible(true)
-		this.txt2.setText('Continuar')
+		this.txt2.setText(getPhrase('Continue'))
 		this.decor.setVisible(true)
 		this.decortxt.setVisible(true)
-		this.decortxt.setText('Ganaste!')
+		this.decortxt.setText(getPhrase('Win'))
 		this.endlvl = true
+		this.p = true
 	}
 	shutdown()
 	{

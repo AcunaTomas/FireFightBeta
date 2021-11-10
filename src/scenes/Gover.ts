@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { getPhrase } from '../services/translations'
 export default class HelloWorldScene extends Phaser.Scene
 {
     private scn
@@ -12,7 +13,7 @@ export default class HelloWorldScene extends Phaser.Scene
     }
     preload()
     {
-        this.load.image('gover', 'assets/menu/GameOvah.png')
+        this.load.image('gover', 'assets/Menu/GameOvah.png')
     }
     create()
     {
@@ -24,7 +25,7 @@ export default class HelloWorldScene extends Phaser.Scene
         this.add.image(994,13, 'prope')
         var a = this.add.image(250,350, 'play')
         var b = this.add.image(1000,350, 'play')
-        this.add.text(150, 330, 'Reintentar', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' });
+        this.add.text(150, 330, getPhrase('Retry'), { fontFamily:'Wood', fontSize: '72px', fill: '#663300' });
         this.add.text(950, 330, 'Menu', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' });
         a.setInteractive()
         b.setInteractive()

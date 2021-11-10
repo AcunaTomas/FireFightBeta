@@ -1,4 +1,7 @@
 import Phaser from 'phaser'
+import { getPhrase } from '~/services/translations'
+
+//The level loader
 export default class HelloWorldScene extends Phaser.Scene
 {
     private scn
@@ -12,7 +15,21 @@ export default class HelloWorldScene extends Phaser.Scene
         this.scn = s.s
     }
     preload()
-    {
+    {    var progress = this.add.graphics();
+
+        this.load.on('progress', function (value) {
+    
+            progress.clear();
+            progress.fillStyle(0xffffff, 1);
+            progress.fillRect(0, 70, 800 * value, 60);
+    
+        });
+    
+        this.load.on('complete', function () {
+    
+            progress.destroy();
+    
+        });
         this.load.image('ficon','assets/Menu/ficon.png')
         this.load.image('wicon','assets/Menu/wicon.png')
         this.load.audio('fire', 'assets/SFX/sel.wav')
@@ -28,8 +45,9 @@ export default class HelloWorldScene extends Phaser.Scene
         this.load.image('rock2', 'assets/Rock2.png')
         this.load.image('rock3', 'assets/Rock3.png')
         this.load.image('smallfire', 'assets/Chars/smallfire.png')
-        this.load.image('shoot', 'assets/Chars/shoot.png')
-        this.load.image('shooty', 'assets/Chars/shooty.png')
+        this.load.spritesheet('shoot', 'assets/Chars/shootx.png', {frameWidth:210, frameHeight:82, spacing:23})
+        this.load.spritesheet('shooty', 'assets/Chars/shooty.png', {frameWidth:82, frameHeight:210, spacing:23})
+        this.load.image('box','assets/Menu/TextBox.png')
         this.load.spritesheet('marselo', 'assets/Chars/Spritebombero.png', {frameWidth:92, frameHeight:129,spacing:26});
         this.load.image('waterbot','assets/Chars/water.png')
         switch (this.scn)
@@ -78,7 +96,7 @@ export default class HelloWorldScene extends Phaser.Scene
     
     create(delta)
     {
-        if (this.scn == 0)
+        if (this.scn == 0 || this.scn > 5) //catch invalid entries, send the user back to the main menu
         {
             this.scene.start('menu');
         }
@@ -186,9 +204,43 @@ export default class HelloWorldScene extends Phaser.Scene
 
         )
 
+        this.anims.create(
+            {
+                key: 'sx',
+                frames: this.anims.generateFrameNumbers('shoot',{start: 0, end: 2}),
+                frameRate: 4,
+                repeat: -1
+                
+            }
+
+        )
+
+                this.anims.create(
+            {
+                key: 'sy',
+                frames: this.anims.generateFrameNumbers('shooty',{start: 0, end: 2}),
+                frameRate: 4,
+                repeat: -1
+                
+            }
+
+        )
+
         var ta
-        ta = this.add.text(400, 300, '', { fontSize: '28px', fill: '#FFF' });
-        ta.setText('Objective: Debug the Fires');
+        var hof
+        if (Math.floor(Math.random() * 2) == 0)
+        {
+            hof = 'Hint'
+        }
+        else
+        {
+            hof = 'Fact'
+        }
+        this.add.image(640,360,'box').setScale(2.0)
+        this.add.text(600,70, hof, {fontFamily:'Wood', fontSize:'72px'})
+        this.add.text(240, 200, getPhrase(hof + Math.floor(Math.random() * 3 + 1)), {fontSize: '28px', fill: '#FFF'})
+        ta = this.add.text(640, 500, '', { fontSize: '28px', fill: '#FFF' });
+        ta.setText(getPhrase('Play') + '!');
         ta.setInteractive();
         ta.on('pointerdown', () => this.scene.start('Lvl', {s:this.scn}));
     }

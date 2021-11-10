@@ -46,6 +46,10 @@ export default class Lvl extends Phaser.Scene
                 this.mus.play()
                 this.scene.launch('HUD',{s:this.scn})
                 this.wlchk = false
+                var col = new Phaser.Display.Color(0, 51, 0);
+                var rect = new Phaser.Geom.Rectangle(0,0,3600,1500)
+                var gra = this.add.graphics({ fillStyle: { color: col.color } })
+                gra.fillRectShape(rect)
                 this.timer = this.time.delayedCall(120000, this.gameovr,[true],this)
                 this.spawntmr = this.time.delayedCall(4000, this.startcheck,[true],this)
                 this.cursors = this.input.keyboard.createCursorKeys()
@@ -113,8 +117,8 @@ export default class Lvl extends Phaser.Scene
 
         
                 //Collision
-                this.wshot = this.physics.add.sprite(sp.x,sp.y,'shoot');
-                this.wshot2 = this.physics.add.sprite(sp.x,sp.y,'shooty');
+                this.wshot = this.physics.add.sprite(sp.x,sp.y,'shoot').anims.play('sx');
+                this.wshot2 = this.physics.add.sprite(sp.x,sp.y,'shooty').anims.play('sy');
                 this.player = this.physics.add.sprite(sp.x,sp.y,'marselo');
                 this.waterbott = this.physics.add.sprite(wb.x,wb.y, 'waterbot').setScale(0.5)
                 this.pointer = this.input.activePointer;
