@@ -18,6 +18,7 @@ export default class HelloWorldScene extends Phaser.Scene
     create()
     {
         this.sound.stopAll()
+        this.sound.play('los')
         this.add.image(1280/2,720/2, 'gover')
         this.add.image(244,203, 'prope')
         this.add.image(244,13, 'prope')

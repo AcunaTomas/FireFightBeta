@@ -21,6 +21,26 @@ export default class HelloWorldScene extends Phaser.Scene
     private txt4
     private txt5
     private txtback
+    private backimg
+    private box
+    private langtxt
+    private langbtn
+    private desclang
+    private obacktxt
+    private helptxt1
+    private helptxt2
+    private helptxt3
+    private helptxt4
+    private helpbtn
+    private himg1
+    private himg2
+
+    private ling
+    private sbtn
+    private stxt
+    private sbtntxt
+
+    private hvisible
 
     //Translation strings - Shameless Copypasta
     private spanish
@@ -41,6 +61,8 @@ export default class HelloWorldScene extends Phaser.Scene
     }
     create()
     {  
+        this.ling = 'esp'
+        this.hvisible = false
         this.sound.stopAll()
         this.sound.play('mus')
         this.add.image(1280/2,720/2, 'tback')
@@ -58,12 +80,32 @@ export default class HelloWorldScene extends Phaser.Scene
         this.txt3 = this.add.text(780, 160, '3', { fontFamily:'Wood', fontSize: '72px', fill: '#FFF' })
         this.txt4 = this.add.text(530, 320, '4', { fontFamily:'Wood', fontSize: '72px', fill: '#FFF' })
         this.txt5 = this.add.text(720, 320, '5', { fontFamily:'Wood', fontSize: '72px', fill: '#FFF' })
-        this.txtback = this.add.text(580, 420, 'Atras', { fontFamily:'Wood', fontSize: '72px', fill: '#663300' })
+        this.txtback = this.add.text(580, 420, getPhrase('Back'), { fontFamily:'Wood', fontSize: '72px', fill: '#663300' })
+        this.box = this.add.image(640, 360, 'box').setVisible(false).setScale(2.0)
+        this.langbtn = this.add.image(750, 140, 'Hbutt').setVisible(false)
+        this.helpbtn = this.add.image(500, 560, 'Hbutt').setVisible(false)
+        this.langtxt = this.add.text(700,110,getPhrase('Language'), {fontFamily:'Wood', fontSize:'72px', fill: '#cc3300'}).setVisible(false)
+        this.backimg = this.add.image(850,560,'Hbutt').setVisible(false).setInteractive()
+        this.obacktxt = this.add.text(800,530,getPhrase('Back'), {fontFamily:'Wood', fontSize:'72px', fill: '#cc3300'}).setVisible(false)
+        this.desclang = this.add.text(350,110,getPhrase('lang'), {fontFamily:'Wood', fontSize:'72px', fill: '#cc3300'}).setVisible(false)
+        this.helptxt1 = this.add.text(460,530,getPhrase('Help'), {fontFamily:'Wood', fontSize:'72px', fill: '#cc3300'}).setVisible(false)
+        this.helptxt2 = this.add.text(250,100,getPhrase('Help1'), {fontSize:'24px', fill: '#FFFFFF'}).setVisible(false)
+        this.helptxt3 = this.add.text(250,250,getPhrase('Help2'), {fontSize:'24px', fill: '#FFFFFF'}).setVisible(false)
+        this.helptxt4 = this.add.text(250,350,getPhrase('Help3'), {fontSize:'24px', fill: '#FFFFFF'}).setVisible(false)
+        this.himg1 = this.add.image(600,200,'himg1').setVisible(false).setScale(0.1)
+        this.sbtn = this.add.image(750,280, 'Hbutt').setVisible(false)
+        this.stxt = this.add.text(350,260,getPhrase('Sound'), {fontFamily:'Wood', fontSize:'72px', fill: '#cc3300'}).setVisible(false)
+        this.sbtntxt = this.add.text(700,240,getPhrase('Yes'), {fontFamily:'Wood', fontSize:'72px', fill: '#cc3300'}).setVisible(false)
+
+        this.langtxt.setInteractive()
+        this.obacktxt.setInteractive()
+        this.helpbtn.setInteractive()
         this.txt1.setVisible(false).setInteractive()
         this.txt2.setVisible(false).setInteractive()
         this.txt3.setVisible(false).setInteractive()
         this.txt4.setVisible(false).setInteractive()
         this.txt5.setVisible(false).setInteractive()
+        this.sbtn.setInteractive()
         this.txtback.setVisible(false).setInteractive()
         this.lvlback.setVisible(false)
         this.men.setInteractive()
@@ -79,15 +121,20 @@ export default class HelloWorldScene extends Phaser.Scene
         this.men.on('pointerdown', this.play, this);
         this.dad.on('pointerdown', this.levels, this);
         this.ded.on('pointerdown', this.options, this);
-
-
+        this.langtxt.on('pointerdown',this.chlng, this)
+        this.backimg.on('pointerdown',this.hideoptions, this)
+        this.obacktxt.on('pointerdown',this.hideoptions,this)
+        this.helpbtn.on('pointerdown', this.helpshow, this)
+        this.sbtn.on('pointerdown', this.snd, this)
     }
 
     update()
     {
         if(this.wasChangedLanguage === FETCHED){
             this.wasChangedLanguage = READY;
-            //this.updatedTextInScene.setText(getPhrase(this.updatedString));
+            this.mtxt.setText(getPhrase('Play'))
+            this.datxt.setText(getPhrase('Levels'))
+            this.detxt.setText(getPhrase('Options'))
         }
     }
     play()
@@ -96,9 +143,79 @@ export default class HelloWorldScene extends Phaser.Scene
     }
     options()
     {
-        //this.scene.start('gover')
-        this.getTranslations(EN_US)
+        this.box.setVisible(true)
+        this.langbtn.setVisible(true)
+        this.helpbtn.setVisible(true)
+        this.langtxt.setVisible(true)
+        this.obacktxt.setVisible(true)
+        this.backimg.setVisible(true)
+        this.desclang.setVisible(true)
+        this.helptxt1.setVisible(true)
+        this.sbtntxt.setVisible(true)
+        this.stxt.setVisible(true)
+        this.sbtn.setVisible(true)
+        this.men.removeInteractive()
+        this.dad.removeInteractive()
+        this.ded.removeInteractive()
     }
+    helpshow()
+    {
+        if (this.hvisible  == false)
+        {
+            this.langbtn.setVisible(false)
+            this.langtxt.setVisible(false)
+            this.obacktxt.setVisible(false)
+            this.desclang.setVisible(false)
+            this.stxt.setVisible(false)
+            this.sbtn.setVisible(false)
+            this.backimg.setVisible(false)
+            this.sbtntxt.setVisible(false)
+            this.helptxt2.setVisible(true)
+            this.helptxt3.setVisible(true)
+            this.helptxt4.setVisible(true)
+            this.himg1.setVisible(true)
+            this.helptxt1.setText(getPhrase('Back'))
+            
+            this.hvisible = true
+        }
+        else
+        {
+            this.langbtn.setVisible(true)
+            this.langtxt.setVisible(true)
+            this.obacktxt.setVisible(true)
+            this.desclang.setVisible(true)
+            this.stxt.setVisible(true)
+            this.sbtn.setVisible(true)
+            this.sbtntxt.setVisible(true)
+            this.backimg.setVisible(true)
+            this.helptxt1.setText(getPhrase('Help'))
+            this.helptxt2.setVisible(false)
+            this.helptxt3.setVisible(false)
+            this.helptxt4.setVisible(false)
+            this.himg1.setVisible(false)
+            this.hvisible = false
+        }
+
+    }
+
+    hideoptions()
+    {
+        this.box.setVisible(false)
+        this.langbtn.setVisible(false)
+        this.helpbtn.setVisible(false)
+        this.langtxt.setVisible(false)
+        this.helptxt1.setVisible(false)
+        this.obacktxt.setVisible(false)
+        this.desclang.setVisible(false)
+        this.backimg.setVisible(false)
+        this.stxt.setVisible(false)
+        this.sbtntxt.setVisible(false)
+        this.sbtn.setVisible(false)
+        this.men.setInteractive()
+        this.dad.setInteractive()
+        this.ded.setInteractive()
+    }
+
     levels()
     {
         this.lvlback.setVisible(true)
@@ -132,6 +249,35 @@ export default class HelloWorldScene extends Phaser.Scene
         this.wasChangedLanguage = FETCHED
         // si solo se tiene un menu para elegir las opciones de idiomas conviene cargar aca la misma
         // this.scene.start('play')
+    }
+
+    chlng()
+    {
+        if (this.ling == 'esp')
+        {
+            this.getTranslations(EN_US)
+            this.ling = 'usa'
+        }
+        else if (this.ling == 'usa')
+        {
+            this.getTranslations(ES_AR)
+            this.ling = 'esp'
+        }
+
+    }
+
+    snd()
+    {
+        if (this.sound.mute == false)
+        {
+            this.sound.mute = true
+            this.sbtntxt.setText('No')
+        }
+        else
+        {
+            this.sound.mute = false
+            this.sbtntxt.setText(getPhrase('Yes'))
+        }
     }
 }
 

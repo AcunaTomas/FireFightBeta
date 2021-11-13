@@ -13,12 +13,13 @@ export default class HelloWorldScene extends Phaser.Scene
     init(s)
     {
         this.scn = s.s
+        this.add.image(1280/2,720/2, 'tback')
     }
     preload()
     {    var progress = this.add.graphics();
 
         this.load.on('progress', function (value) {
-    
+            
             progress.clear();
             progress.fillStyle(0xffffff, 1);
             progress.fillRect(0, 70, 800 * value, 60);
@@ -47,7 +48,6 @@ export default class HelloWorldScene extends Phaser.Scene
         this.load.image('smallfire', 'assets/Chars/smallfire.png')
         this.load.spritesheet('shoot', 'assets/Chars/shootx.png', {frameWidth:210, frameHeight:82, spacing:23})
         this.load.spritesheet('shooty', 'assets/Chars/shooty.png', {frameWidth:82, frameHeight:210, spacing:23})
-        this.load.image('box','assets/Menu/TextBox.png')
         this.load.spritesheet('marselo', 'assets/Chars/Spritebombero.png', {frameWidth:92, frameHeight:129,spacing:26});
         this.load.image('waterbot','assets/Chars/water.png')
         switch (this.scn)
@@ -239,7 +239,8 @@ export default class HelloWorldScene extends Phaser.Scene
         this.add.image(640,360,'box').setScale(2.0)
         this.add.text(600,70, hof, {fontFamily:'Wood', fontSize:'72px'})
         this.add.text(240, 200, getPhrase(hof + Math.floor(Math.random() * 3 + 1)), {fontSize: '28px', fill: '#FFF'})
-        ta = this.add.text(640, 500, '', { fontSize: '28px', fill: '#FFF' });
+        this.add.image(640,525,'Hbutt')
+        ta = this.add.text(600, 500, '', {fontFamily:'Wood', fontSize: '72px', fill: '#FFF' });
         ta.setText(getPhrase('Play') + '!');
         ta.setInteractive();
         ta.on('pointerdown', () => this.scene.start('Lvl', {s:this.scn}));

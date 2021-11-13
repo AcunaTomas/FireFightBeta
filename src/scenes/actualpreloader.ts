@@ -79,8 +79,14 @@ init()
 }
 preload()
 {
+    this.load.audio('los', 'assets/SFX/derrota.wav')
+    this.load.audio('vic', 'assets/SFX/victoria.wav')
+    this.load.audio('adv','assets/SFX/advanced.wav')
+    this.load.audio('waters','assets/SFX/shooting.wav')
 
-
+    this.load.image('himg1', 'assets/Menu/IconoAgua.png')
+    this.load.image('Hbutt', 'assets/Menu/button.png')
+    this.load.image('box','assets/Menu/TextBox.png')
     this.load.image('menu1', "assets/Menu/Options1.png")
     this.load.image('tback', 'assets/Menu/LogoVacio.png')
     this.load.image('tlogo', 'assets/Menu/LogoTitulo.png')
@@ -96,14 +102,14 @@ preload()
     this.load.image('lvlscr','assets/Menu/LvlSelect.png')
 }
 update()
-{console.log(this.gif.anims.getProgress())
+{//console.log(this.gif.anims.getProgress())
     if (this.gif.anims.getProgress() == 1)
     {
         this.loadtr = true
         if (this.loadtr && this.enabletr)
         {
-        this.getTranslations(EN_US)
-        //this.time.delayedCall(3000,() => this.scene.start('menu'))  
+        //this.getTranslations(ES_AR)
+        this.time.delayedCall(3000,() => this.scene.start('menu'))  
         this.enabletr = false
         }
 

@@ -101,6 +101,18 @@ export default class FireController
 
     deadOnEnter()
     {
+        var fi = false
+        this.scene.foreste.forEach(
+
+            tree => {
+                if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, tree.tree.x, tree.tree.y) <= 1 && fi == false)
+                {
+                    fi = true
+                    tree.tree.data.set('ignites', false)
+                    tree.stateMachine.setState('treeidle')
+                }
+            }
+        )
         this.sprite.destroy()
     }
 

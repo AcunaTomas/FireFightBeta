@@ -76,7 +76,19 @@ export default class HUD extends Phaser.Scene
 		if (!this.p)
 		{
 			this.c += 17
-			this.timetxt.setText('Time: ' + this.c.toString().substring(0,2))
+			if (this.c < 10000)
+			{
+			this.timetxt.setText('Time: ' + this.c.toString().substring(0,1))
+			}
+			else if (this.c < 100000)
+			{
+				this.timetxt.setText('Time: ' + this.c.toString().substring(0,2))
+			}
+			else
+			{
+				this.timetxt.setText('Time: ' + this.c.toString().substring(0,3))
+			}
+
 		}
 
 	}
@@ -101,6 +113,7 @@ export default class HUD extends Phaser.Scene
 			this.pausebut.removeInteractive()
 			this.txt1.setVisible(true)
 			this.txt2.setVisible(true)
+			
 			events.emit('pause')
 		}
 
@@ -123,6 +136,7 @@ export default class HUD extends Phaser.Scene
 			this.txt1.setVisible(false)
 			this.txt2.setVisible(false)
 			this.pausebut.setInteractive()
+
 			events.emit('unpause')
 		}
 
@@ -165,6 +179,8 @@ export default class HUD extends Phaser.Scene
 		this.decor.setVisible(true)
 		this.decortxt.setVisible(true)
 		this.decortxt.setText(getPhrase('Win'))
+		this.sound.stopAll()
+		this.sound.play('vic')
 		this.endlvl = true
 		this.p = true
 	}

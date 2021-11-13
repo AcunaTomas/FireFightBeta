@@ -1,4 +1,3 @@
-import { Vector } from 'matter'
 import Phaser from 'phaser'
 import StateMachine from '../statemachine/StateMachine'
 import { sharedInstance as events } from './EventCenter'
@@ -73,18 +72,8 @@ export default class bomber
 		this.stateMachine.update(dt)
 	}
 
-	private setHealth(value: number) //
-	{
-		this.health = Phaser.Math.Clamp(value, 0, 100)
 
-		// TODO: check for death
-		if (this.health <= 0)
-		{
-			this.stateMachine.setState('dead')
-		}
-	}
-
-	private idleOnEnter() //maybe I'll use this someday
+	private idleOnEnter()
 	{
 		//console.log(this.sprite)
 		if (this.health <= 0)
@@ -111,6 +100,7 @@ export default class bomber
 			{
 				events.emit('shoot')
 				//console.log('shoot')
+				
 			}
 
 		}
@@ -119,6 +109,7 @@ export default class bomber
 
 	private walkOnEnter() //moves the player
 	{
+		this.scene.psnd.play()
 		this.sprite.play('pwalk')
 		this.mx = this.pointer.worldX
 		this.my = this.pointer.worldY
@@ -136,15 +127,17 @@ export default class bomber
 	private walkOnUpdate()
 	{
 		//console.log(this.sprite.body.facing)
-		this.scene.psnd.play()
+
 		if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, this.mx, this.my) < 3)
 		{
 			this.sprite.play('pidle')
+			this.scene.psnd.stop()
 			this.stateMachine.setState('idle')
 		}
 		if (!this.sprite.body.touching.none)
 		{
 			this.sprite.play('pidle')
+			this.scene.psnd.stop()
 			this.stateMachine.setState('idle')
 		}
 
@@ -152,18 +145,10 @@ export default class bomber
 
 	private walkOnExit()
 	{
-		this.sprite.body.stop()
+		this.sprite.setVelocity(0)
 		//this.sprite.setVelocity(0,0)
 	}
 
-	private deadOnEnter() //Legacy
-	{
-		//this.sprite.play('player-death')
-
-		//this.scene.time.delayedCall(1500, () => {
-		//	this.scene.scene.start('game-over')
-		//})
-	}
 	private shoot()
 	{
 		if (this.mode)
@@ -172,6 +157,7 @@ export default class bomber
 			{
 				this.stateMachine.setState('shoot')
 				this.health += -5
+				this.scene.sound.play('waters')
 			}
 			else
 			{

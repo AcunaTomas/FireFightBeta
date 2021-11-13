@@ -35,7 +35,7 @@
                         {
                          "name":"Win",
                          "type":"int",
-                         "value":1
+                         "value":0
                         }],
                  "rotation":0,
                  "type":"",
@@ -170,8 +170,8 @@
                  "type":"",
                  "visible":true,
                  "width":70,
-                 "x":2323.66666666667,
-                 "y":303
+                 "x":2332.66666666667,
+                 "y":239
                 }, 
                 {
                  "gid":6,
@@ -423,31 +423,8 @@
                  "type":"",
                  "visible":true,
                  "width":70,
-                 "x":2139.66666666667,
-                 "y":846.333333333333
-                }, 
-                {
-                 "gid":6,
-                 "height":126,
-                 "id":206,
-                 "name":"Tree",
-                 "properties":[
-                        {
-                         "name":"collides",
-                         "type":"bool",
-                         "value":true
-                        }, 
-                        {
-                         "name":"ignites",
-                         "type":"bool",
-                         "value":false
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":70,
-                 "x":2143.66666666667,
-                 "y":914.333333333333
+                 "x":2142.66666666667,
+                 "y":713.333333333333
                 }, 
                 {
                  "gid":6,
@@ -492,8 +469,8 @@
                  "type":"",
                  "visible":true,
                  "width":70,
-                 "x":2331.66666666667,
-                 "y":233
+                 "x":2328.66666666667,
+                 "y":302
                 }, 
                 {
                  "gid":6,
@@ -1228,8 +1205,8 @@
                  "type":"",
                  "visible":true,
                  "width":70,
-                 "x":2140.33333333334,
-                 "y":784.333333333333
+                 "x":2142.33333333334,
+                 "y":780.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",

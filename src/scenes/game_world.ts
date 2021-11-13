@@ -42,7 +42,16 @@ export default class Lvl extends Phaser.Scene
     {
                 //Creation - Camera, Physics Groups, Solid Objects, Controls
                 this.sound.stopAll()
-                this.mus = this.sound.add('game')
+                if (this.scn > 3)
+                {
+                    this.mus = this.sound.add('adv') 
+                }
+                else
+                {
+                    this.mus = this.sound.add('game')
+                }
+                
+
                 this.mus.play()
                 this.scene.launch('HUD',{s:this.scn})
                 this.wlchk = false
@@ -219,11 +228,13 @@ export default class Lvl extends Phaser.Scene
     resume()
     {
         this.paused = false
+        this.mus.resume()
     }
     pause()
     {
         this.paused = true
-        console.log(this.paused)
+        this.mus.pause()
+        //console.log(this.paused)
     }
     gameovr(a)
     {
