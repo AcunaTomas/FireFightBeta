@@ -39,7 +39,7 @@ export default class Lvl extends Phaser.Scene
         this.scn = s.s
     }
     create()
-    {
+    {           this.scene.stop('HUD')
                 //Creation - Camera, Physics Groups, Solid Objects, Controls
                 this.sound.stopAll()
                 if (this.scn > 3)
@@ -53,6 +53,7 @@ export default class Lvl extends Phaser.Scene
                 
 
                 this.mus.play()
+                
                 this.scene.launch('HUD',{s:this.scn})
                 this.wlchk = false
                 var col = new Phaser.Display.Color(0, 51, 0);
@@ -60,7 +61,7 @@ export default class Lvl extends Phaser.Scene
                 var gra = this.add.graphics({ fillStyle: { color: col.color } })
                 gra.fillRectShape(rect)
                 this.timer = this.time.delayedCall(120000, this.gameovr,[true],this)
-                this.spawntmr = this.time.delayedCall(4000, this.startcheck,[true],this)
+                this.spawntmr = this.time.delayedCall(300, this.startcheck,[true],this)
                 this.cursors = this.input.keyboard.createCursorKeys()
                 const walls = this.physics.add.staticGroup()
                 const plants = this.physics.add.staticGroup()

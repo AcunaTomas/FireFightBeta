@@ -8,7 +8,7 @@ export default class HUD extends Phaser.Scene
 	private starsLabel!: Phaser.GameObjects.Text
 	private starsCollected = 0
 	private graphics!: Phaser.GameObjects.Graphics
-    private pausemenu: Phaser.Physics.Arcade.Image
+    private pausemenu!: Phaser.Physics.Arcade.Image
     private pausebut!: Phaser.Physics.Arcade.Image
 	private menbut!: Phaser.Physics.Arcade.Image
 	private watertxt!: Phaser.GameObjects.Text
@@ -69,9 +69,10 @@ export default class HUD extends Phaser.Scene
 		events.on('win', this.lvlend, this)
 		events.on('lose', this.shutdown, this)
 		events.on('firecount',this.drawfire,this)
+		events.on('hudupdate', this.walkshoothandler, this)
     }
 
-	update()
+	update() //Update loop, mostly to keep track of the time
 	{
 		if (!this.p)
 		{
@@ -92,12 +93,12 @@ export default class HUD extends Phaser.Scene
 		}
 
 	}
-	drawfire(a)
+	drawfire(a) //Draws fire counter
 	{
 		this.firetxt.setText(a.a + '/' + a.b)
-		this.dfire.setScale(a.a/a.b)
+		this.dfire.setScale(a.a/a.b + 0.5)
 	}
-	pause()
+	pause() //pauses the game
 	{
 		if (this.endlvl)
 		{
@@ -111,6 +112,7 @@ export default class HUD extends Phaser.Scene
 			this.menbut.setVisible(true)
 			this.resbut.setVisible(true)
 			this.pausebut.removeInteractive()
+			this.wsbut.removeInteractive()
 			this.txt1.setVisible(true)
 			this.txt2.setVisible(true)
 			
@@ -118,7 +120,7 @@ export default class HUD extends Phaser.Scene
 		}
 
 	}
-	unpause()
+	unpause() //unpauses the game
 	{
 		if (this.endlvl)
 		{
@@ -136,15 +138,19 @@ export default class HUD extends Phaser.Scene
 			this.txt1.setVisible(false)
 			this.txt2.setVisible(false)
 			this.pausebut.setInteractive()
+			this.wsbut.setInteractive()
 
 			events.emit('unpause')
 		}
 
 	}
-	walkshoothandler()
+	walkshoothandler(a) //The mode change button
 	{
-		console.log('mode changed')
-		events.emit('bstatechange')
+		//console.log('mode changed')
+		if (a != true)
+		{
+			events.emit('bstatechange', false)
+		}
 		if (this.an == false)
 		{
 			console.log('a')
@@ -158,17 +164,17 @@ export default class HUD extends Phaser.Scene
 			this.an = false
 		}
 	}
-	menu()
+	menu() //Opens the menu
 	{
 		events.emit('stop')
 		this.scene.start('menu')
 	}
-	hudpdate(health)
+	hudpdate(health) //Updates the water
 	{
 		this.watertxt.setText('    : ' + health)
 	}
 
-	lvlend()
+	lvlend() //Shows the level end options
 	{
 		this.pausemenu.setVisible(true)
 		this.menbut.setVisible(true)
@@ -184,12 +190,12 @@ export default class HUD extends Phaser.Scene
 		this.endlvl = true
 		this.p = true
 	}
-	shutdown()
+	shutdown() //shutsdown everything
 	{
 		events.emit('stop')
 
 	}
-	nextlvl()
+	nextlvl() //The win menu
 	{
 		events.emit('stop')
 		this.scn+=1

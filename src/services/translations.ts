@@ -4,7 +4,7 @@ const PROJECT_ID = 'ckvh6x25r04491g3f90u4ihh5';
 let translations = null;
 let language = ES_AR;
 
-function adaptTranslations(data) {
+export function adaptTranslations(data) {
     let adaptees = {};
     data.words.forEach(w => {
         adaptees[w.key] = w.translate;
@@ -21,6 +21,7 @@ export async function getTranslations(lang = language) {
     .then(response => response.json())
     .then(data => {
         console.log(`FETCH TRANSLATIONS --- ${JSON.stringify(data)}`);
+        translations = null; // Por alguna razón, esta variable no era limpiada a la hora de obtener nuevas traducciónes
         localStorage.setItem('translations', adaptTranslations(data));
     });
 }

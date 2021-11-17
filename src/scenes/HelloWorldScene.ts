@@ -13,6 +13,7 @@ export default class HelloWorldScene extends Phaser.Scene
     init(s)
     {
         this.scn = s.s
+        this.scene.stop('HUD')
         this.add.image(1280/2,720/2, 'tback')
     }
     preload()
@@ -237,7 +238,7 @@ export default class HelloWorldScene extends Phaser.Scene
             hof = 'Fact'
         }
         this.add.image(640,360,'box').setScale(2.0)
-        this.add.text(600,70, hof, {fontFamily:'Wood', fontSize:'72px'})
+        this.add.text(600,70, getPhrase(hof), {fontFamily:'Wood', fontSize:'72px'})
         this.add.text(240, 200, getPhrase(hof + Math.floor(Math.random() * 3 + 1)), {fontSize: '28px', fill: '#FFF'})
         this.add.image(640,525,'Hbutt')
         ta = this.add.text(600, 500, '', {fontFamily:'Wood', fontSize: '72px', fill: '#FFF' });

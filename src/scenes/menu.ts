@@ -61,7 +61,7 @@ export default class HelloWorldScene extends Phaser.Scene
     }
     create()
     {  
-        this.ling = 'esp'
+        this.ling = getPhrase('Language')
         this.hvisible = false
         this.sound.stopAll()
         this.sound.play('mus')
@@ -132,9 +132,7 @@ export default class HelloWorldScene extends Phaser.Scene
     {
         if(this.wasChangedLanguage === FETCHED){
             this.wasChangedLanguage = READY;
-            this.mtxt.setText(getPhrase('Play'))
-            this.datxt.setText(getPhrase('Levels'))
-            this.detxt.setText(getPhrase('Options'))
+            
         }
     }
     play()
@@ -248,21 +246,32 @@ export default class HelloWorldScene extends Phaser.Scene
         await getTranslations(language)
         this.wasChangedLanguage = FETCHED
         // si solo se tiene un menu para elegir las opciones de idiomas conviene cargar aca la misma
-        // this.scene.start('play')
+        this.scene.restart()
     }
 
     chlng()
     {
-        if (this.ling == 'esp')
+        if (this.ling == 'Español')
         {
+            localStorage.clear()
             this.getTranslations(EN_US)
-            this.ling = 'usa'
+            this.ling = 'English'
+            this.langtxt.setText(getPhrase('Language'))
         }
-        else if (this.ling == 'usa')
+        else if (this.ling == 'English')
         {
+            localStorage.clear()
             this.getTranslations(ES_AR)
-            this.ling = 'esp'
+            this.ling = 'Español'
+            this.langtxt.setText(getPhrase('Language'))
         }
+        ///else if (this.ling == 'Português')
+        //{
+       //     localStorage.clear()
+       //     this.getTranslations(ES_AR)
+       //     this.ling = 'Español'
+       //     this.langtxt.setText(getPhrase('Language'))
+       // }
 
     }
 

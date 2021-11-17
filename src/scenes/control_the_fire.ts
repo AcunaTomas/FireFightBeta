@@ -119,7 +119,7 @@ export default class FireController
     private igniteOnEnter()
     {
         this.stateMachine.setState('burn')
-        this.scene.firesnd.play()
+        //this.scene.firesnd.play()
         this.sprite.anims.play('idle')
 
     }

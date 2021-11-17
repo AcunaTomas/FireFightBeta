@@ -86,8 +86,9 @@ export default class bomber
 	{
 		if (Phaser.Input.Keyboard.JustDown(this.cursors.space) && this.pollinput)
 		{
-			events.emit('bstatechange')
-			console.log(this.sprite)
+			events.emit('bstatechange', true)
+			console.log('bomberman deployed')
+
 		}
 		if (this.pointer.isDown && this.pollinput && this.scene.input.activePointer.getDuration() < 100)
 		{
@@ -124,7 +125,7 @@ export default class bomber
 		}
 	}
 
-	private walkOnUpdate()
+	private walkOnUpdate() //Stops the player if they reach their destination or gets stopped by an obstacle
 	{
 		//console.log(this.sprite.body.facing)
 
@@ -260,7 +261,7 @@ export default class bomber
 	{
 
 	}
-	private vschange() //switch firing modes
+	private vschange(a) //switch firing modes
 	{
 		if (!this.mode)
 		{
@@ -271,6 +272,11 @@ export default class bomber
 		{
 			this.mode = false
 		}
+		if (a == true)
+		{
+			events.emit('hudupdate', a)
+		}
+		
 	}
 	private del()
 	{
@@ -280,6 +286,7 @@ export default class bomber
 	private changehealth(health)
 	{
 		this.health += health
+		this.scene.sound.play('pwup')
 		events.emit('waterchange', this.health)
 	}
 }
