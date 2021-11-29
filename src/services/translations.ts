@@ -5,6 +5,7 @@ let translations = null;
 let language = ES_AR;
 
 export function adaptTranslations(data) {
+    translations = null
     let adaptees = {};
     data.words.forEach(w => {
         adaptees[w.key] = w.translate;

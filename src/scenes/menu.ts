@@ -255,17 +255,21 @@ export default class HelloWorldScene extends Phaser.Scene
         {
             localStorage.clear()
             //this.getTranslations(EN_US)
-            adaptTranslations(this.cache.json.get('eng'))
+            localStorage.clear()
+            localStorage.setItem('translations', adaptTranslations(this.cache.json.get('eng')));
             this.ling = 'English'
             this.langtxt.setText(getPhrase('Language'))
+            this.scene.restart()
         }
         else if (this.ling == 'English')
         {
             localStorage.clear()
             //this.getTranslations(ES_AR)
-            adaptTranslations(this.cache.json.get('spa'))
+            localStorage.clear()
+            localStorage.setItem('translations', adaptTranslations(this.cache.json.get('spa')));
             this.ling = 'Español'
             this.langtxt.setText(getPhrase('Language'))
+            this.scene.restart()
         }
         ///else if (this.ling == 'Português')
         //{

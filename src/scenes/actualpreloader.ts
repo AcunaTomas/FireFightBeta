@@ -110,11 +110,7 @@ preload()
     this.load.audio('mus', 'assets/SFX/menu.wav')
     this.load.image('lvlscr','assets/Menu/LvlSelect.png')
 }
-create()
-{
-    adaptTranslations(this.cache.json.get('esp'))
-    this.scene.start('menu')
-}
+
 update()
 {//console.log(this.gif.anims.getProgress())
     
@@ -124,9 +120,10 @@ update()
         this.wasChangedLanguage = READY;
     }
 
-    if (this.wasChangedLanguage === READY && this.gif.anims.getProgress() == 1)
+    if (this.gif.anims.getProgress() == 1)
     {
-        this.time.delayedCall(1000,() => this.scene.start('menu'))
+        localStorage.setItem('translations', adaptTranslations(this.cache.json.get('spa')));
+        this.time.delayedCall(1100,() => this.scene.start('menu'))
     }
 }
 
