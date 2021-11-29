@@ -80,10 +80,13 @@ init()
     a.fillStyle(0xffffff, 1)
     a.fillRect(0,0,1280,720)
     this.gif = this.add.sprite(640, 360, '0').play('r');
-    this.getTranslations(ES_AR)
+    //this.getTranslations(ES_AR)
 }
 preload()
 {
+    this.load.json('eng', 'assets/eng.json')
+    this.load.json('spa', 'assets/spa.json')
+
     this.load.audio('los', 'assets/SFX/derrota.wav')
     this.load.audio('vic', 'assets/SFX/victoria.wav')
     this.load.audio('adv','assets/SFX/advanced.wav')
@@ -107,8 +110,16 @@ preload()
     this.load.audio('mus', 'assets/SFX/menu.wav')
     this.load.image('lvlscr','assets/Menu/LvlSelect.png')
 }
+create()
+{
+    adaptTranslations(this.cache.json.get('esp'))
+    this.scene.start('menu')
+}
 update()
 {//console.log(this.gif.anims.getProgress())
+    
+    
+    
     if(this.wasChangedLanguage === FETCHED){
         this.wasChangedLanguage = READY;
     }

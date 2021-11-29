@@ -4,7 +4,7 @@
 import Phaser from 'phaser'
 import { DE_DE, EN_US, ES_AR, PT_BR } from '../enums/languages'
 import { FETCHED, FETCHING, READY, TODO } from '../enums/status'
-import { getTranslations, getPhrase } from '../services/translations'
+import { getTranslations, getPhrase, adaptTranslations } from '../services/translations'
 export default class HelloWorldScene extends Phaser.Scene
 {
     //Interface code -
@@ -254,14 +254,16 @@ export default class HelloWorldScene extends Phaser.Scene
         if (this.ling == 'Español')
         {
             localStorage.clear()
-            this.getTranslations(EN_US)
+            //this.getTranslations(EN_US)
+            adaptTranslations(this.cache.json.get('eng'))
             this.ling = 'English'
             this.langtxt.setText(getPhrase('Language'))
         }
         else if (this.ling == 'English')
         {
             localStorage.clear()
-            this.getTranslations(ES_AR)
+            //this.getTranslations(ES_AR)
+            adaptTranslations(this.cache.json.get('spa'))
             this.ling = 'Español'
             this.langtxt.setText(getPhrase('Language'))
         }
