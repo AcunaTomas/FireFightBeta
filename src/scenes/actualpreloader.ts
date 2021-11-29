@@ -80,6 +80,7 @@ init()
     a.fillStyle(0xffffff, 1)
     a.fillRect(0,0,1280,720)
     this.gif = this.add.sprite(640, 360, '0').play('r');
+    this.getTranslations(ES_AR)
 }
 preload()
 {
@@ -108,21 +109,13 @@ preload()
 }
 update()
 {//console.log(this.gif.anims.getProgress())
-    if (this.gif.anims.getProgress() == 1)
-    {
-        this.loadtr = true
-        if (this.loadtr && this.enabletr)
-        {
-        this.getTranslations(ES_AR)
-        //localStorage.setItem('translations', adaptTranslations(words))
-        //this.time.delayedCall(3000,() => this.scene.start('menu'))  
-        this.enabletr = false
-        }
-
-    }
     if(this.wasChangedLanguage === FETCHED){
         this.wasChangedLanguage = READY;
-        this.scene.start('menu')
+    }
+
+    if (this.wasChangedLanguage === READY && this.gif.anims.getProgress() == 1)
+    {
+        this.time.delayedCall(1000,() => this.scene.start('menu'))
     }
 }
 

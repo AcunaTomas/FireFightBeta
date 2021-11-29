@@ -2,12 +2,12 @@ import Phaser from 'phaser'
 import StateMachine from '../statemachine/StateMachine'
 import { sharedInstance as events } from './EventCenter'
 
-type CursorKeys = Phaser.Types.Input.Keyboard.CursorKeys
+//type CursorKeys = Phaser.Types.Input.Keyboard.CursorKeys
 export default class bomber
 {
 	private scene: Phaser.Scene
 	private sprite: Phaser.Physics.Arcade.Sprite
-	private cursors: CursorKeys
+	private cursors: Phaser.Input.Keyboard.Key
 	private pointer: Phaser.Input.Pointer
 	private stateMachine: StateMachine
 	private watershoot: Phaser.Physics.Arcade.Sprite
@@ -19,15 +19,16 @@ export default class bomber
 	private mode = false
 	private firex = 0
 	private firey = 0
-	private pollinput
+	private pollinput = false
 
 	constructor(scene: Phaser.Scene,sprite: Phaser.Physics.Arcade.Sprite, cursors: CursorKeys, pointer: Phaser.Input.Pointer, watershoot:Phaser.Physics.Arcade.Sprite, watershooty:Phaser.Physics.Arcade.Sprite )
 	{
+		console.log('Bombero deployed')
 		this.scene = scene
 		this.sprite = sprite
-		this.cursors = cursors
+		this.cursors = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 		this.pointer = pointer
-		this.pollinput = true
+		this.pollinput = false
 		this.watershoot = watershoot
 		this.watershooty = watershooty
 		this.watershoot.setScale(1.1,1.4).refreshBody()
@@ -63,8 +64,9 @@ export default class bomber
 		events.on('healthchanged', this.changehealth, this)
 		events.on('pause', ()=> this.pollinput = false, this)
 		events.on('unpause', ()=> this.scene.time.delayedCall(600, ()=> this.pollinput = true), this)
-		//events.on('win', this.del, this)
-		//events.on('lose', this.del, this)
+		events.on('win', this.del, this)
+		events.on('lose', this.del, this)
+		this.scene.time.delayedCall(150, ()=> {this.pollinput = true})
 	}
 
 	update(dt: number)
@@ -84,7 +86,7 @@ export default class bomber
 
 	private idleOnUpdate() //checks for input
 	{
-		if (Phaser.Input.Keyboard.JustDown(this.cursors.space) && this.pollinput)
+		if (Phaser.Input.Keyboard.JustDown(this.cursors) && this.pollinput)
 		{
 			events.emit('bstatechange', true)
 			console.log('bomberman deployed')
@@ -281,7 +283,7 @@ export default class bomber
 	private del()
 	{
 		console.log('del')
-		this.sprite.destroy(true)
+		delete this
 	}
 	private changehealth(health)
 	{

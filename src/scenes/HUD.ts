@@ -32,6 +32,7 @@ export default class HUD extends Phaser.Scene
 
     init(s)
     {
+		
 		this.scn = s.s
 		this.c = 0
 		this.an = false
@@ -115,7 +116,6 @@ export default class HUD extends Phaser.Scene
 			this.wsbut.removeInteractive()
 			this.txt1.setVisible(true)
 			this.txt2.setVisible(true)
-			
 			events.emit('pause')
 		}
 

@@ -11,7 +11,7 @@ export default class Lvl extends Phaser.Scene
     private player?: Phaser.Physics.Arcade.Sprite
     private fires: FireController[] = []
     private foreste: TreeController[] = []
-    private bomber?: bomber
+    private bomber?: bomber[] = []
     private pointer?: Phaser.Input.Pointer
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
     private coolcam: Phaser.Cameras.Scene2D.Camera | undefined
@@ -37,9 +37,10 @@ export default class Lvl extends Phaser.Scene
     init(s)
     {
         this.scn = s.s
+        
     }
     create()
-    {           this.scene.stop('HUD')
+    {           
                 //Creation - Camera, Physics Groups, Solid Objects, Controls
                 this.sound.stopAll()
                 if (this.scn > 3)
@@ -74,7 +75,7 @@ export default class Lvl extends Phaser.Scene
                 this.psnd = this.sound.add('pstep')
                 this.fires = []
                 this.foreste = []
-
+                this.bomber = []
         
                 //Load Tilemaps
                 var mapx = this.make.tilemap({key: ('map' + this.scn)})
@@ -132,14 +133,14 @@ export default class Lvl extends Phaser.Scene
                 this.player = this.physics.add.sprite(sp.x,sp.y,'marselo');
                 this.waterbott = this.physics.add.sprite(wb.x,wb.y, 'waterbot').setScale(0.5)
                 this.pointer = this.input.activePointer;
-                this.bomber = new bomber(
+                this.bomber?.push(new bomber(
                     this,
                     this.player,
                     this.cursors,
                     this.pointer,
                     this.wshot,
                     this.wshot2
-                )
+                ))  
                 this.player.setScale(0.6)
                 //Colliders
                 //this.physics.add.collider(this.player, level);
@@ -156,23 +157,25 @@ export default class Lvl extends Phaser.Scene
     }
     update(delta, dt: number)
     {   //console.log(this.paused)
+        
         if (this.paused == false)
         {
             this.time.paused = false
-            this.physics.resume()
+            this.physics.resume()   
             this.anims.resumeAll()
             this.winlose()
-            this.bomber?.update(dt)
+            this.bomber?.forEach(bomb => bomb.update(dt) )
             this.foreste.forEach(tree => tree.update(dt))
             this.fires.forEach(fire => fire.update(dt))
             this.coolcam.startFollow(this.player)
-            console.log(this.fires.length)
+            
         }
         else
         {
             this.physics.pause()
             this.anims.pauseAll()
             this.time.paused = true
+            
         }
 
 
@@ -266,6 +269,7 @@ export default class Lvl extends Phaser.Scene
     }
     stp()
     {
-        this.scene.stop()
+        delete this.bomber
+        this.scene.stop('Lvl')
     }
 }
