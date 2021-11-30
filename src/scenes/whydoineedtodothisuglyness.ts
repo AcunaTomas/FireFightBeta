@@ -8,6 +8,10 @@ constructor()
 {
     super('ugly')
 }
+init()
+{
+    this.add.text(420,300,'Cargando Traducciones...',{fontFamily:'Wood',fontSize:'72px', align:'center'})
+}
 
 preload()
 {
@@ -21,6 +25,8 @@ preload()
             this.proceed = true
         }
     }
+    this.load.json('eng', 'assets/eng.json')
+    this.load.json('spa', 'assets/spa.json')
 }
 
 update(time: number, delta: number): void {

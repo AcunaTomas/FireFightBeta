@@ -265,6 +265,7 @@ export default class bomber
 	}
 	private vschange(a) //switch firing modes
 	{
+		
 		if (!this.mode)
 		{
 			this.mode = true
@@ -278,12 +279,13 @@ export default class bomber
 		{
 			events.emit('hudupdate', a)
 		}
-		
+		this.pollinput = false
+		this.scene.time.delayedCall(100,()=> this.pollinput = true)
 	}
 	private del()
 	{
 		console.log('del')
-		delete this
+		delete this.scene.bomber
 	}
 	private changehealth(health)
 	{

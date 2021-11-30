@@ -84,9 +84,6 @@ init()
 }
 preload()
 {
-    this.load.json('eng', 'assets/eng.json')
-    this.load.json('spa', 'assets/spa.json')
-
     this.load.audio('los', 'assets/SFX/derrota.wav')
     this.load.audio('vic', 'assets/SFX/victoria.wav')
     this.load.audio('adv','assets/SFX/advanced.wav')
