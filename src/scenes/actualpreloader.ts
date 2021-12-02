@@ -80,6 +80,7 @@ init()
     a.fillStyle(0xffffff, 1)
     a.fillRect(0,0,1280,720)
     this.gif = this.add.sprite(640, 360, '0').play('r');
+    
     //this.getTranslations(ES_AR)
 }
 preload()
@@ -119,7 +120,7 @@ update()
 
     if (this.gif.anims.getProgress() == 1)
     {
-        localStorage.setItem('translations', adaptTranslations(this.cache.json.get('spa')));
+        this.add.text(500,550, 'Por favor, espere', {fontFamily:'Wood',fill:'#cc3300', fontSize:'72px'})
         this.time.delayedCall(1100,() => this.scene.start('menu'))
     }
 }
