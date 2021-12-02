@@ -32,6 +32,7 @@ export default class HelloWorldScene extends Phaser.Scene
             progress.destroy();
     
         });
+        this.load.audio('adv','assets/SFX/advanced.wav')
         this.load.image('ficon','assets/Menu/ficon.png')
         this.load.image('wicon','assets/Menu/wicon.png')
         this.load.audio('fire', 'assets/SFX/sel.wav')

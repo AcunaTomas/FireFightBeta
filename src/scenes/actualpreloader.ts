@@ -85,11 +85,20 @@ init()
 }
 preload()
 {
-    this.load.audio('los', 'assets/SFX/derrota.wav')
-    this.load.audio('vic', 'assets/SFX/victoria.wav')
-    this.load.audio('adv','assets/SFX/advanced.wav')
-    this.load.audio('waters','assets/SFX/shooting.wav')
-    this.load.audio('pwup', 'assets/SFX/powerups.wav')
+    var progress = this.add.graphics();
+    this.load.on('progress', (value)=> {
+        
+        if (this.gif.anims.getProgress() == 1)
+        {   progress.clear();
+            progress.fillStyle(0x00000, 1);
+            progress.fillRect(0, 70, 800 * value, 60);
+            this.add.text(500,550, 'Por favor, espere', {fontFamily:'Wood',fill:'#cc3300', fontSize:'72px'}
+        }
+        
+    })
+
+
+
 
     this.load.image('himg1', 'assets/Menu/IconoAgua.png')
     this.load.image('Hbutt', 'assets/Menu/button.png')
@@ -120,8 +129,8 @@ update()
 
     if (this.gif.anims.getProgress() == 1)
     {
-        this.add.text(500,550, 'Por favor, espere', {fontFamily:'Wood',fill:'#cc3300', fontSize:'72px'})
-        this.time.delayedCall(1100,() => this.scene.start('menu'))
+        
+        this.time.delayedCall(1000,()=> this.scene.start('menu'))
     }
 }
 

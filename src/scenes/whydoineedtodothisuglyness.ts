@@ -27,6 +27,10 @@ preload()
             this.proceed = true
         }
     }
+    this.load.audio('los', 'assets/SFX/derrota.wav')
+    this.load.audio('vic', 'assets/SFX/victoria.wav')
+    this.load.audio('waters','assets/SFX/shooting.wav')
+    this.load.audio('pwup', 'assets/SFX/powerups.wav')
     this.load.json('eng', 'assets/eng.json')
     this.load.json('spa', 'assets/spa.json')
     
